@@ -23,7 +23,7 @@ const Header = () => {
       <Scroll_and_reveal direction="right">
         <div className="select-none flex justify-center mt-0 lg:mt-10 xl:mt-12 2xl:mt-14">
           <motion.button
-            className="w-[7rem] h-[2.2rem] text-center rounded-[8rem] border border-zinc-500 overflow-hidden relative mt-10 "
+            className="w-[7rem] h-[2.5rem] text-center rounded-[8rem] border-2 border-zinc-700 overflow-hidden relative mt-10 "
             whileHover="hover"
           >
             <motion.div

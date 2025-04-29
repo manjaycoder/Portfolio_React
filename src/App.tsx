@@ -1,64 +1,61 @@
 
-import Skill from "./Components/Skill"
-import About from "./Components/About"
-import Header from "./Components/Header"
-import Marque from "./Components/Marque"
-import Navber from "./Components/Navber"
-import AnimatedCursor from "react-animated-cursor"
 
-
+import Skill from "./Components/Skill";
+import About from "./Components/About";
+import Header from "./Components/Header";
+import Marque from "./Components/Marque";
+import Navber from "./Components/Navber";
+import Projects from "./Components/Projects";
+import LocoMotive from "./Components/LocoMotive";
+import "../src/App.css";
+import SplashCursor from "./Components/SplashCursor";
+import { useEffect } from "react";
+import Contact from "./Components/Contact";
 const App = () => {
- 
+  useEffect(() => {
+    const disableShortcuts = (e:any) => {
+      if (
+        e.keyCode === 123 || // F12
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J')) || // Ctrl+Shift+I/C/J
+        (e.ctrlKey && e.key === 'U') // Ctrl+U (view source)
+      ) {
+        e.preventDefault();
+      }
+    };
+  
+    const disableContextMenu = (e:any) => e.preventDefault();
+  
+    window.addEventListener('keydown', disableShortcuts);
+    window.addEventListener('contextmenu', disableContextMenu);
+  
+    return () => {
+      window.removeEventListener('keydown', disableShortcuts);
+      window.removeEventListener('contextmenu', disableContextMenu);
+    };
+  }, []);
+  
   return (
-    <>
-    <div className="w-full h-full overflow-x-hidden" >
-    <Navber/>
-   <Header/>
-   <AnimatedCursor
-      innerSize={8}
-      outerSize={8}
-      color='212, 212, 216'
-      outerAlpha={0.2}
-      innerScale={0.7}
-      outerScale={5}
-      clickables={[
-        'a',
-        'input[type="text"]',
-        'input[type="email"]',
-        'input[type="number"]',
-        'input[type="submit"]',
-        'input[type="image"]',
-        'label[for]',
-        'select',
-        'textarea',
-        'button',
-        '.link',
-        {
-          target: '.custom',
-          options: {
-            innerSize: 12,
-            outerSize: 12,
-            color: '212, 212, 216',
-            outerAlpha: 0.3,
-            innerScale: 0.7,
-            outerScale: 5
-          }
-        }
-      ]}
-    />
-    {/* <Header/> */}
-    
-    <About/>
-    <Marque/>
-    <Skill/>
-    </div>
-   
-    </>
-   
-   
-    
-    
-  )
-}
+    <LocoMotive>
+      <div className="overflow-y-auto overflow-x-hidden scrollbar-thin  scroll-hide ">
+        <Navber />
 
-export default App
+        <SplashCursor />
+        <Header />
+       
+        <About />
+       
+        <Marque />
+        
+        <Skill />
+        
+        <Projects />
+        
+        <Contact />
+      </div>
+      <hr className="bg-zinc-300 w-full m-10 lg:mt-20" />
+      {/* Navbar */}
+    </LocoMotive>
+  );
+};
+
+export default App;

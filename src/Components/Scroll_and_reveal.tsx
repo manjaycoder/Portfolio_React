@@ -1,24 +1,36 @@
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
-const Scroll_and_reveal = ({ children, direction = "up" }) => {
+const Scroll_and_reveal = ({ children, direction = "up" }:any) => {
   const { ref, inView } = useInView({
     triggerOnce: true,
-    threshold: 0.2, // reveal when 20% is visible
+    threshold: 0.2, 
   });
 
   // Direction variants
-  const getDirectionVariant = (dir) => {
+  const getDirectionVariant = (dir:any) => {
     switch (dir) {
       case "left":
-        return { hidden: { x: -100, opacity: 0 }, visible: { x: 0, opacity: 1 } };
+        return {
+          hidden: { x: -100, opacity: 0 },
+          visible: { x: 0, opacity: 1 },
+        };
       case "right":
-        return { hidden: { x: 100, opacity: 0 }, visible: { x: 0, opacity: 1 } };
+        return {
+          hidden: { x: 100, opacity: 0 },
+          visible: { x: 0, opacity: 1 },
+        };
       case "down":
-        return { hidden: { y: -100, opacity: 0 }, visible: { y: 0, opacity: 1 } };
+        return {
+          hidden: { y: -100, opacity: 0 },
+          visible: { y: 0, opacity: 1 },
+        };
       case "up":
       default:
-        return { hidden: { y: 100, opacity: 0 }, visible: { y: 0, opacity: 1 } };
+        return {
+          hidden: { y: 100, opacity: 0 },
+          visible: { y: 0, opacity: 1 },
+        };
     }
   };
 

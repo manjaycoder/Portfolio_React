@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Scroll_and_reveal from "./Scroll_and_reveal";
@@ -8,27 +8,40 @@ const Navber = () => {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  // Disable body scroll when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden"; // no scroll
+    } else {
+      document.body.style.overflow = "auto"; // allow scroll
+    }
+
+    // Clean up on unmount
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isMenuOpen]);
+
   return (
     <Scroll_and_reveal direction="right">
-    <div className="fixed top-0 left-0 w-full z-50 bg-black text-slate-50 py-3 px-4 sm:px-6 md:px-8 lg:px-16 select-none">
-      <div className="flex justify-between items-center">
-        {/* Logo */}
-        <div className="text-xl font-bold">
-          <a className="text-xl font-sans" href="#">
-            Manjay
-          </a>
+      <div className="fixed top-0 left-0 w-full z-50  text-slate-50 py-3 px-4 sm:px-6 md:px-8 lg:px-16 select-none ">
+        <div className="flex justify-between items-center ">
+          {/* Logo */}
+          <div className="text-xl font-bold">
+            <a className="text-xl font-sans" href="#">
+              Manjay
+            </a>
+          </div>
+
+          {/* Menu Icon */}
+          <div className="cursor-pointer " onClick={toggleMenu}>
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </div>
         </div>
 
-        {/* Menu Icon */}
-        <div className="cursor-pointer" onClick={toggleMenu}>
-          {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
-        </div>
-      </div>
-
-      {/* Animated dropdown menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          
+        {/* Animated dropdown menu */}
+        <AnimatePresence>
+          {isMenuOpen && (
             <motion.div
               key="menu"
               initial={{ height: 0, opacity: 0 }}
@@ -38,7 +51,7 @@ const Navber = () => {
               className="overflow-hidden w-full mt-2"
             >
               <motion.ul
-                className="flex flex-col gap-4 text-base w-full"
+                className="flex flex-col gap-6 text-base w-full"
                 initial="hidden"
                 animate="visible"
                 exit="hidden"
@@ -56,7 +69,11 @@ const Navber = () => {
                     <motion.a
                       href="#"
                       whileHover={{ scale: 1.1 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 12 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 12,
+                      }}
                       className="inline-block pr-2"
                     >
                       {item}
@@ -65,10 +82,9 @@ const Navber = () => {
                 ))}
               </motion.ul>
             </motion.div>
-          
-        )}
-      </AnimatePresence>
-    </div>
+          )}
+        </AnimatePresence>
+      </div>
     </Scroll_and_reveal>
   );
 };
