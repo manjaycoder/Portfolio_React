@@ -24,7 +24,6 @@ function easeOutCubic(t: number): number {
 export function IconCloud({ icons, images }: IconCloudProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [iconPositions, setIconPositions] = useState<Icon[]>([]);
-  const [rotation, setRotation] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 });
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -38,7 +37,7 @@ export function IconCloud({ icons, images }: IconCloudProps) {
     duration: number;
   } | null>(null);
   const animationFrameRef = useRef<number>();
-  const rotationRef = useRef(rotation);
+  const rotationRef = useRef({ x: 0, y: 0 });
   const iconCanvasesRef = useRef<HTMLCanvasElement[]>([]);
   const imagesLoadedRef = useRef<boolean[]>([]);
 
@@ -56,7 +55,7 @@ export function IconCloud({ icons, images }: IconCloudProps) {
       const offCtx = offscreen.getContext("2d");
 
       if (offCtx) {
-        if (images) {
+        if (images && typeof items[index] === 'string') {
           // Handle image URLs directly
           const img = new Image();
           img.crossOrigin = "anonymous";
@@ -75,10 +74,10 @@ export function IconCloud({ icons, images }: IconCloudProps) {
 
             imagesLoadedRef.current[index] = true;
           };
-        } else {
+        } else if (icons && React.isValidElement(item)) {
           // Handle SVG icons
           offCtx.scale(0.4, 0.4);
-          const svgString = renderToString(item as React.ReactElement);
+          const svgString = renderToString(item);
           const img = new Image();
           img.src = "data:image/svg+xml;base64," + btoa(svgString);
           img.onload = () => {
@@ -233,12 +232,8 @@ export function IconCloud({ icons, images }: IconCloudProps) {
         const easedProgress = easeOutCubic(progress);
 
         rotationRef.current = {
-          x:
-            targetRotation.startX +
-            (targetRotation.x - targetRotation.startX) * easedProgress,
-          y:
-            targetRotation.startY +
-            (targetRotation.y - targetRotation.startY) * easedProgress,
+          x: targetRotation.startX + (targetRotation.x - targetRotation.startX) * easedProgress,
+          y: targetRotation.startY + (targetRotation.y - targetRotation.startY) * easedProgress,
         };
 
         if (progress >= 1) {
@@ -265,23 +260,15 @@ export function IconCloud({ icons, images }: IconCloudProps) {
         const opacity = Math.max(0.2, Math.min(1, (rotatedZ + 150) / 200));
 
         ctx.save();
-        ctx.translate(
-          canvas.width / 2 + rotatedX,
-          canvas.height / 2 + rotatedY
-        );
+        ctx.translate(canvas.width / 2 + rotatedX, canvas.height / 2 + rotatedY);
         ctx.scale(scale, scale);
         ctx.globalAlpha = opacity;
 
         if (icons || images) {
-          // Only try to render icons/images if they exist
-          if (
-            iconCanvasesRef.current[index] &&
-            imagesLoadedRef.current[index]
-          ) {
+          if (iconCanvasesRef.current[index] && imagesLoadedRef.current[index]) {
             ctx.drawImage(iconCanvasesRef.current[index], -20, -20, 40, 40);
           }
         } else {
-          // Show numbered circles if no icons/images are provided
           ctx.beginPath();
           ctx.arc(0, 0, 20, 0, Math.PI * 2);
           ctx.fillStyle = "#4444ff";
