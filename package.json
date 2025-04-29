@@ -18,8 +18,8 @@
     "framer-motion": "^12.9.2",
     "locomotive-scroll": "^4.1.4",
     "lucide-react": "^0.503.0",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-fast-marquee": "^1.6.5",
     "react-icons": "^5.5.0",
     "react-intersection-observer": "^9.16.0",
@@ -41,5 +41,9 @@
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0"
+  },
+  "overrides": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   }
 }
